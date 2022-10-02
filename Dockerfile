@@ -30,5 +30,4 @@ RUN cp /usr/share/postgresql/postgresql.conf.sample /usr/share/postgresql/postgr
     echo shared_preload_libraries = 'pg_bigm' >> /usr/share/postgresql/postgresql.conf && \
     chmod 444 /usr/share/postgresql/postgresql.conf
 
-CMD [ "postgres", "-c", "config_file=/usr/share/postgresql/postgresql.conf" ]
-
+CMD ["postgres", "-c", "config_file=/usr/share/postgresql/postgresql.conf"]
