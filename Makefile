@@ -33,3 +33,11 @@ check-args:
 	elif [ -z "$(TARGET)" ]; then\
 		exit 1;\
 	fi
+
+lint:
+	npx dprint check
+	npx prettier -c .
+
+fmt:
+	npx dprint fmt
+	npx prettier -w .
