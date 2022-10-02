@@ -19,7 +19,7 @@ push: check-args
 
 .PHONY: test
 test: check-args
-	docker exec -e PGPASSWORD=1234 test psql --user=postgres --no-password --dbname=postgres -c "CREATE EXTENSION pg_bigm;\dx pg_bigm"
+	docker exec -e PGPASSWORD=1234 test psql --user=postgres --no-password --dbname=postgres -c "CREATE EXTENSION pg_bigm;"
 
 .PHONY: check-args
 check-args:
