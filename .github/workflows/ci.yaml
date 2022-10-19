@@ -43,6 +43,9 @@ jobs:
       - name: create extension test
         run: |
           bash test/create-extension.sh
+      - name: load images to kind
+        run: |
+          kind load docker-image lyra95/postgres-bigm:"${NEW_TAG}"
       - name: read replica test
         run: |
           bash test/read-replica/run.sh
