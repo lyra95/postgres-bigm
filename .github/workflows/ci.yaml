@@ -42,17 +42,20 @@ jobs:
           make -e build
       - name: create extension test
         run: |
-          bash test/create-extension.sh
+          bash test/create-extension/run.sh
+      - name: create extension status
+        if: ${{ always() }}
+        run: |
+          bash test/create-extension/status.sh
       - name: load images to kind
         run: |
           kind load docker-image lyra95/postgres-bigm:"${NEW_TAG}"
       - name: read replica test
         run: |
           bash test/read-replica/run.sh
-      - name: status
+      - name: read replica status
         if: ${{ always() }}
         run: |
-          bash test/docker-status.sh
           bash test/read-replica/status.sh
   build-official:
     strategy:
@@ -82,8 +85,8 @@ jobs:
           make -e build
       - name: create extension test
         run: |
-          bash test/create-extension.sh
-      - name: status
+          bash test/create-extension/run.sh
+      - name: create extension status
         if: ${{ always() }}
         run: |
-          bash test/docker-status.sh
+          bash test/create-extension/status.sh
