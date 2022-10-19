@@ -22,8 +22,6 @@ jobs:
             { base: bitnami/postgresql, tag: 14 },
             { base: bitnami/postgresql, tag: 14.5.0 },
           ]
-    env:
-      TARGET: bitnami
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -51,8 +49,6 @@ jobs:
             { base: postgres, tag: 14-bullseye },
             { base: postgres, tag: 14.5-bullseye },
           ]
-    env:
-      TARGET: official
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3

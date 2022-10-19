@@ -2,7 +2,11 @@
 
 set -euo pipefail
 
-docker run --name test -dp 5432 -e POSTGRESQL_PASSWORD=1234 -e POSTGRES_PASSWORD=1234 "lyra95/postgres-bigm:${NEW_TAG}"
+docker run --name test -dp 5432 \
+  -e POSTGRESQL_PASSWORD=1234 \
+  -e POSTGRES_PASSWORD=1234 \
+  -e POSTGRESQL_SHARED_PRELOAD_LIBRARIES=pgaudit,pg_bigm \
+  "lyra95/postgres-bigm:${NEW_TAG}"
 
 # sleep until stabilized
 sleep 5
