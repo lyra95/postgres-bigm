@@ -1,0 +1,23 @@
+architecture: replication
+postgresqlSharedPreloadLibraries: pg_bigm,pgaudit
+
+image:
+  repository: lyra95/postgres-bigm
+  pullPolicy: Never
+
+auth:
+  enablePostgresUser: true
+  postgresPassword: "1234"
+
+primary:
+  initdb:
+    scripts:
+      00-create-extension.sql: |
+        CREATE EXTENSION IF NOT EXISTS pg_bigm;
+  persistence:
+    size: 1Gi
+
+readReplicas:
+  replicaCount: 2
+  persistence:
+    size: 1Gi
