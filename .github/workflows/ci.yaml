@@ -46,6 +46,11 @@ jobs:
       - name: read replica test
         run: |
           bash test/read-replica/run.sh
+      - name: status
+        if: ${{ always() }}
+        run: |
+          bash test/docker-status.sh
+          bash test/read-replica/status.sh
   build-official:
     strategy:
       matrix:
@@ -75,3 +80,7 @@ jobs:
       - name: create extension test
         run: |
           bash test/create-extension.sh
+      - name: status
+        if: ${{ always() }}
+        run: |
+          bash test/docker-status.sh
