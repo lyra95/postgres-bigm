@@ -41,10 +41,7 @@ jobs:
           make -e build
       - name: test
         run: |
-          make -e run
-          sleep 5
-          docker logs test
-          make -e test
+          bash test/create-extension.sh
   build-official:
     strategy:
       matrix:
@@ -73,7 +70,4 @@ jobs:
           make -e build
       - name: test
         run: |
-          make -e run
-          sleep 5
-          docker logs test
-          make -e test
+          bash test/create-extension.sh
