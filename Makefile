@@ -4,10 +4,11 @@ TARGET=
 BASE=
 TAG=
 NEW_TAG=
+POSTGRESQL_BUILD_PKG_VERSION ?= all
 
 .PHONY: build
 build: check-args
-	docker build --target="$(TARGET)" --build-arg IMAGE_BASE="$(BASE):$(TAG)" -f Dockerfile . -t "lyra95/postgres-bigm:$(NEW_TAG)"
+	docker build --target="$(TARGET)" --build-arg IMAGE_BASE="$(BASE):$(TAG)" --build-arg POSTGRESQL_BUILD_PKG_VERSION="$(POSTGRESQL_BUILD_PKG_VERSION)" -f Dockerfile . -t "lyra95/postgres-bigm:$(NEW_TAG)"
 
 .PHONY: push
 push: check-args
