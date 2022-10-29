@@ -13,6 +13,8 @@ jobs:
             { base: bitnami/postgresql, tag: 14 },
             { base: bitnami/postgresql, tag: 14.5.0 },
           ]
+    env:
+      ARCH: linux/amd64
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -26,11 +28,9 @@ jobs:
           BASE=${{ matrix.image.base }}
           TAG=${{ matrix.image.tag }}
           NEW_TAG=$(echo "$BASE-$TAG" | sed -E 's/[^A-Za-z0-9_.-]/-/g')
-          ARCH=linux/amd64
           echo "BASE=$BASE" >> $GITHUB_ENV
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-          echo "ARCH=$ARCH" >> $GITHUB_ENV
       - run: |
           make -e push
   build-and-push-official:
@@ -42,10 +42,14 @@ jobs:
             { base: postgres, tag: 14-bullseye },
             { base: postgres, tag: 14.5-bullseye },
           ]
+    env:
+      ARCH: linux/amd64,linux/arm64
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-buildx-action@v2
+        with:
+          platforms: linux/amd64,linux/arm64
       - uses: docker/login-action@v2
         with:
           username: lyra95
@@ -56,11 +60,9 @@ jobs:
           TAG=${{ matrix.image.tag }}
           NEW_TAG=$(echo "$BASE-$TAG" | sed -E 's/[^A-Za-z0-9_.-]/-/g')
           POSTGRESQL_BUILD_PKG_VERSION=$(echo $TAG | sed -E 's/([0-9]*).*/\1/g')
-          ARCH=linux/amd64
           echo "BASE=$BASE" >> $GITHUB_ENV
           echo "TAG=$TAG" >> $GITHUB_ENV
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "POSTGRESQL_BUILD_PKG_VERSION=${POSTGRESQL_BUILD_PKG_VERSION:-all}" >> $GITHUB_ENV
-          echo "ARCH=$ARCH" >> $GITHUB_ENV
       - run: |
           make -e push
