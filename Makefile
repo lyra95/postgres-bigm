@@ -13,7 +13,8 @@ build: check-args
 		--build-arg POSTGRESQL_BUILD_PKG_VERSION="$(POSTGRESQL_BUILD_PKG_VERSION)" \
 		-f Dockerfile . \
 		-t "lyra95/postgres-bigm:$(NEW_TAG)" \
-		--platform "$(ARCH)"
+		--platform "$(ARCH)" \
+		--load
 
 .PHONY: push
 push: check-args
