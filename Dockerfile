@@ -15,4 +15,4 @@ FROM ${IMAGE_BASE}
 COPY --from=build /pg_bigm-1.2-20200228/*.deb ./
 
 USER root
-RUN dpkg -i bigm_20200228-1_amd64.deb
+RUN dpkg -i bigm_*.deb
