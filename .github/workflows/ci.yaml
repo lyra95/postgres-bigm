@@ -13,53 +13,6 @@ jobs:
           node-version: "22"
       - run: |
           make lint
-  build-bitnami:
-    strategy:
-      matrix:
-        image:
-          [
-            { base: bitnamilegacy/postgresql, tag: latest },
-            { base: bitnamilegacy/postgresql, tag: 17 },
-          ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v6
-      - uses: docker/setup-buildx-action@v4
-      - uses: helm/kind-action@v1
-        with:
-          cluster_name: kind
-      - name: set-env
-        run: |
-          BASE=${{ matrix.image.base }}
-          TAG=${{ matrix.image.tag }}
-          NEW_TAG=$(echo "$BASE-$TAG" | sed -E 's/[^A-Za-z0-9_.-]/-/g')
-          ARCH=linux/amd64
-          echo "BASE=$BASE" >> $GITHUB_ENV
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-          echo "ARCH=$ARCH" >> $GITHUB_ENV
-      - name: build
-        env:
-          POSTGRESQL_BUILD_PKG_VERSION: "17"
-        run: |
-          make -e build
-      - name: create extension test
-        run: |
-          bash test/create-extension/run.sh
-      - name: create extension status
-        if: ${{ always() }}
-        run: |
-          bash test/create-extension/status.sh
-      - name: load images to kind
-        run: |
-          kind load docker-image lyra95/postgres-bigm:"${NEW_TAG}"
-      - name: read replica test
-        run: |
-          bash test/read-replica/run.sh
-      - name: read replica status
-        if: ${{ always() }}
-        run: |
-          bash test/read-replica/status.sh
   build-official:
     strategy:
       matrix:
