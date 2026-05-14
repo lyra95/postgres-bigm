@@ -7,71 +7,21 @@ jobs:
   lint:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: "16"
+          node-version: "22"
       - run: |
           make lint
-  build-bitnami:
-    strategy:
-      matrix:
-        image:
-          [
-            { base: bitnami/postgresql, tag: latest },
-            { base: bitnami/postgresql, tag: 14 },
-            { base: bitnami/postgresql, tag: 14.5.0 },
-          ]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
-      - uses: helm/kind-action@v1.3.0
-        with:
-          cluster_name: kind
-      - name: set-env
-        run: |
-          BASE=${{ matrix.image.base }}
-          TAG=${{ matrix.image.tag }}
-          NEW_TAG=$(echo "$BASE-$TAG" | sed -E 's/[^A-Za-z0-9_.-]/-/g')
-          ARCH=linux/amd64
-          echo "BASE=$BASE" >> $GITHUB_ENV
-          echo "TAG=$TAG" >> $GITHUB_ENV
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-          echo "ARCH=$ARCH" >> $GITHUB_ENV
-      - name: build
-        run: |
-          make -e build
-      - name: create extension test
-        run: |
-          bash test/create-extension/run.sh
-      - name: create extension status
-        if: ${{ always() }}
-        run: |
-          bash test/create-extension/status.sh
-      - name: load images to kind
-        run: |
-          kind load docker-image lyra95/postgres-bigm:"${NEW_TAG}"
-      - name: read replica test
-        run: |
-          bash test/read-replica/run.sh
-      - name: read replica status
-        if: ${{ always() }}
-        run: |
-          bash test/read-replica/status.sh
   build-official:
     strategy:
       matrix:
         image:
-          [
-            { base: postgres, tag: bullseye },
-            { base: postgres, tag: 14-bullseye },
-            { base: postgres, tag: 14.5-bullseye },
-          ]
+          [{ base: postgres, tag: trixie }, { base: postgres, tag: 18-trixie }]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
-      - uses: docker/setup-buildx-action@v2
+      - uses: actions/checkout@v6
+      - uses: docker/setup-buildx-action@v4
       - name: set-env
         run: |
           BASE=${{ matrix.image.base }}
