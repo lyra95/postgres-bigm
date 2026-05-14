@@ -39,6 +39,8 @@ jobs:
           echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
           echo "ARCH=$ARCH" >> $GITHUB_ENV
       - name: build
+        env:
+          POSTGRESQL_BUILD_PKG_VERSION: "17"
         run: |
           make -e build
       - name: create extension test
